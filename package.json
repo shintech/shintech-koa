@@ -1,0 +1,8 @@
+{
+  "name": "shintech-koa",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Michael Prather",
+  "license": "MIT",
+  "repository": "git@github.com:shintech/shintech-koa.git"
+}

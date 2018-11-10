@@ -23,9 +23,7 @@
     const router = require('./router')
     
     const server = require('./server')({ 
-      pkg,
       logger,
-      router,
       environment,
       port,
       root

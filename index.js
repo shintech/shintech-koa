@@ -1,8 +1,15 @@
 const Koa = require('koa')
-const compress = require('koa-compress')
+const koaCompress = require('koa-compress')
 const bodyParser = require('koa-bodyparser')
 
-module.exports = ({ logger, db, router, environment, port, pkg }) => {
+module.exports = ({
+  logger = console,
+  environment = 'development',
+  port = 8000,
+  host = 'localhost',
+  db = {},
+  compress = false
+}) => {
   const server = new Koa()
 
   server.use(async (ctx, next) => {
@@ -35,26 +42,18 @@ module.exports = ({ logger, db, router, environment, port, pkg }) => {
   })
 
   server.use(bodyParser())
-  server.use(compress({
-    threshold: 1024
-  }))
+
+  if (compress) {
+    server.use(koaCompress({
+      threshold: 1024
+    }))
+  }
 
   server.use(async (ctx, next) => {
     ctx.logger = logger
     ctx.db = db
 
     await next()
-  })
-
-  server.use(router.routes())
-  server.use(router.allowedMethods())
-
-  server.use((ctx, next) => {
-    ctx.body = {
-      status: 'error'
-    }
-
-    ctx.status = 404
   })
 
   return server
